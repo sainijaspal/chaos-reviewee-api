@@ -1,0 +1,32 @@
+module.exports = [
+  {
+    id: 166240689,
+    name: 'reviewee-api',
+    fullName: 'uCreateit/reviewee-api',
+    channelName: 'review-tool',
+    organizationId: 12858694,
+    technologyId: 1,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    id: 179438329,
+    name: 'reviewee-react',
+    fullName: 'uCreateit/reviewee-react',
+    channelName: 'review-tool',
+    organizationId: 12858694,
+    technologyId: 1,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    id: 83525446,
+    name: 'ucreate-review-tool',
+    fullName: 'uCreateit/ucreate-review-tool',
+    channelName: 'review-tool',
+    organizationId: 12858694,
+    technologyId: 1,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+];
