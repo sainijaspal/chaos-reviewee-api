@@ -18,9 +18,9 @@ jobs:
       - COMMITS_CHECK_INDICATOR: \"success\":true
       - CIRCLE_PROJECT_REPONAME: chaos-reviewee-api
     steps:
-      - run:
-          name: Check rejected commits
-          command: wget ${REVIEW_TOOL_URL}/${COMMITS_CHECK_ENDPOINT}?app_name=${CIRCLE_PROJECT_REPONAME} -q -O - | grep -q ${COMMITS_CHECK_INDICATOR}
+      # - run:
+      #     name: Check rejected commits
+      #     command: wget ${REVIEW_TOOL_URL}/${COMMITS_CHECK_ENDPOINT}?app_name=${CIRCLE_PROJECT_REPONAME} -q -O - | grep -q ${COMMITS_CHECK_INDICATOR}
       - checkout
       - run:
           name: Install System Dependencies
