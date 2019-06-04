@@ -33,12 +33,12 @@ const { reportError } = require('./infra/report-error.js');
 
   // ngrock used to test the webhook requests on local machine
   // eslint-disable-next-line global-require
-  const ngrok = require('ngrok');
-  ngrok.authtoken('3fBH81hs4SMfEXSwWvNXo_4epJv34BBN88mJGqNaRz');
-  ngrok.connect(5001, (err, url) => {
-    /* eslint-disable no-console */
-    if (err) console.log(err);
-    console.log(url);
-    /* eslint-enable no-console */
-  });
+  // const ngrok = require('ngrok');
+  // ngrok.authtoken('3fBH81hs4SMfEXSwWvNXo_4epJv34BBN88mJGqNaRz');
+  // ngrok.connect(5001, (err, url) => {
+  //   /* eslint-disable no-console */
+  //   if (err) console.log(err);
+  //   console.log(url);
+  //   /* eslint-enable no-console */
+  // });
 })();
