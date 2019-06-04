@@ -1,0 +1,50 @@
+version: 2
+notify:
+  webhooks:
+    # A list of hashes representing hooks. Only the url field is supported.
+    - url: https://production-review-tool.herokuapp.com/api/buildNotification
+jobs:
+  build:
+    working_directory: ~/chaos-reviewee-api
+    docker:
+      - image: circleci/node:latest
+      - image: mdillon/postgis:10
+        environment:
+          POSTGRES_PASSWORD: reviewee
+          POSTGRES_DB: chaos-reviewee-test
+    environment:
+      - REVIEW_TOOL_URL: http://production-review-tool.herokuapp.com
+      - COMMITS_CHECK_ENDPOINT: api/checkReadyToDeploy
+      - COMMITS_CHECK_INDICATOR: \"success\":true
+      - CIRCLE_PROJECT_REPONAME: chaos-reviewee-api
+    steps:
+      - run:
+          name: Check rejected commits
+          command: wget ${REVIEW_TOOL_URL}/${COMMITS_CHECK_ENDPOINT}?app_name=${CIRCLE_PROJECT_REPONAME} -q -O - | grep -q ${COMMITS_CHECK_INDICATOR}
+      - checkout
+      - run:
+          name: Install System Dependencies
+          command: sudo apt-get update -qq      
+      - run: 
+          name: Install Node dependencies
+          command: npm install
+      - run: 
+          name: Check code quality
+          command: npm run lint
+      - run:
+          name: Install docker
+          command: wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz && sudo tar -C /usr/local/bin -xzvf dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz && rm dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz
+          environment:
+            DOCKERIZE_VERSION: v0.3.0
+      - run:
+          name: Wait for db
+          command: dockerize -wait tcp://localhost:5432 -timeout 1m
+      - run:
+          name: Execute test cases
+          command: npm test
+          environment:
+            TEST_DATABASE_URL: postgres://postgres:reviewee@localhost:5432/chaos-reviewee-test
+      - run:
+         name: Deploy to Heroku
+         command: git push --force https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_NAME.git HEAD:refs/heads/master
+  

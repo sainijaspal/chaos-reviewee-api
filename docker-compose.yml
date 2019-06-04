@@ -1,0 +1,27 @@
+version: "3"
+services:
+  postgres-test:
+    image: mdillon/postgis:10
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: reviewee-test
+    ports:
+      - "5433:5432"
+  postgres-dev:
+    image: mdillon/postgis:10
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: reviewee-dev
+    ports:
+      - "5434:5432"
+    volumes:
+      - ./postgres:/var/lib/postgresql/data
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@pgadmin.com
+      PGADMIN_DEFAULT_PASSWORD: admin@pgadmin.com
+    ports:
+      - "5000:80"
+    volumes:
+      - ./pgadmin:/var/lib/pgadmin

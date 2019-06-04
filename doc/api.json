@@ -1,0 +1,750 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "version": "1.0.0",
+        "title": "Reviewee Application API",
+        "description": "",
+        "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+        }
+    },
+    "basePath": "",
+    "tags": [
+        {
+            "name": "Repositories",
+            "description": "Get the list of all repositories of the organization"
+        },
+        {
+            "name": "Repositories assocaited to team-member",
+            "description": "Get the list of repositories assocaited to team-member"
+        },
+        {
+            "name": "Commits",
+            "description": "Get the list of commits of a repository"
+        },
+        {
+            "name": "Commit",
+            "description": "Get detail of the commit"
+        },
+        {
+            "name": "Accept commit",
+            "description": "update the status of commit to accept"
+        },
+        {
+            "name": "Reject commit",
+            "description": "update the status of commit to reject"
+        },
+        {
+            "name": "Mark as fixed commit",
+            "description": "update the status of commit to mark as fixed"
+        },
+        {
+            "name": "Comment",
+            "description": "post the comment in the commit"
+        },
+        {
+            "name": "Update comment",
+            "description": "post the comment in the commit"
+        },
+        {
+            "name": "Delete comment",
+            "description": "delete the comment from the commit"
+        },
+        {
+            "name": "Collaborators",
+            "description": "get the list of collaborators of repository"
+        }
+    ],
+    "schemes": [
+        "http"
+    ],
+    "consumes": [
+        "application/json"
+    ],
+    "produces": [
+        "application/json"
+    ],
+    "paths": {
+        "/organization/{organizationId}/repositories": {
+            "get": {
+                "tags": [
+                    "Repositories"
+                ],
+                "description": "Get the list of all repositories of the organization",
+                "parameters": [
+                    {
+                        "name": "x-access-token",
+                        "in": "header",
+                        "description": "token of github",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "x-key",
+                        "in": "header",
+                        "description": "Id of logged in team member",
+                        "required": true,
+                        "type": "integer"
+                    },
+                    {
+                        "name": "organizationId",
+                        "in": "path",
+                        "description": "ID of organization to return the repos",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "400": {
+                        "description": "Invalid organization Id"
+                    }
+                }
+            }
+        },
+        "/organization/{organizationId}/member/{teamMemberId}/repositories": {
+            "get": {
+                "tags": [
+                    "Repositories assocaited to team-member"
+                ],
+                "description": "Get the list of repositories assocaited to team-member",
+                "parameters": [
+                    {
+                        "name": "x-access-token",
+                        "in": "header",
+                        "description": "token of github",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "x-key",
+                        "in": "header",
+                        "description": "Id of logged in team member",
+                        "required": true,
+                        "type": "integer"
+                    },
+                    {
+                        "name": "organizationId",
+                        "in": "path",
+                        "description": "ID of organization",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    {
+                        "name": "teamMemberId",
+                        "in": "path",
+                        "description": "ID of member",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    {
+                        "name": "type",
+                        "in": "query",
+                        "description": "Project type 'your projects' as 0 and 'needs help' as 1",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int64",
+                        "example": 0
+                    },
+                    {
+                        "name": "archive",
+                        "in": "query",
+                        "description": "project status for member",
+                        "required": true,
+                        "type": "boolean",
+                        "example": false
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "400": {
+                        "description": "Invalid Id"
+                    }
+                }
+            }
+        },
+        "/repository/{repositoryId}/commits": {
+            "get": {
+                "tags": [
+                    "Commits"
+                ],
+                "description": "Get the list of commits of a repository",
+                "parameters": [
+                    {
+                        "name": "x-access-token",
+                        "in": "header",
+                        "description": "token of github",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "x-key",
+                        "in": "header",
+                        "description": "Id of logged in team member",
+                        "required": true,
+                        "type": "integer"
+                    },
+                    {
+                        "name": "repositoryId",
+                        "in": "path",
+                        "description": "ID of repository",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    {
+                        "name": "offset",
+                        "in": "query",
+                        "required": true,
+                        "description": "offset",
+                        "type": "integer",
+                        "format": "int64",
+                        "example": 0
+                    },
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "required": true,
+                        "description": "status of commits",
+                        "type": "string",
+                        "example": "rejected | to be reviewed"
+                    },
+                    {
+                        "name": "MembersFilter",
+                        "in": "query",
+                        "description": "members id split with comma to filter the commits",
+                        "type": "string"
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "400": {
+                        "description": "Invalid Id"
+                    }
+                }
+            }
+        },
+        "/commit/{uuid}": {
+            "get": {
+                "tags": [
+                    "Commit"
+                ],
+                "description": "Get detail of the commit",
+                "parameters": [
+                    {
+                        "name": "x-access-token",
+                        "in": "header",
+                        "description": "token of github",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "x-key",
+                        "in": "header",
+                        "description": "Id of logged in team member",
+                        "required": true,
+                        "type": "integer"
+                    },
+                    {
+                        "name": "uuid",
+                        "in": "path",
+                        "description": "UUID of commit",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "sha",
+                        "in": "query",
+                        "description": "sha of commit",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "teamMemberId",
+                        "in": "query",
+                        "description": "author Id of commit",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    {
+                        "name": "repositoryFullName",
+                        "in": "query",
+                        "description": "full name of repository",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "400": {
+                        "description": "Invalid Id"
+                    }
+                }
+            }
+        },
+        "/commit/{commitUUID}/accept": {
+            "put": {
+                "tags": [
+                    "Accept commit"
+                ],
+                "description": "update the status of commit to accept",
+                "parameters": [
+                    {
+                        "name": "x-access-token",
+                        "in": "header",
+                        "description": "token of github",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "x-key",
+                        "in": "header",
+                        "description": "Id of logged in team member",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    {
+                        "name": "commitUUID",
+                        "in": "path",
+                        "description": "UUID of commit",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No content"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    }
+                }
+            }
+        },
+        "/commit/{commitUUID}/reject": {
+            "put": {
+                "tags": [
+                    "Reject commit"
+                ],
+                "description": "update the status of commit to reject",
+                "parameters": [
+                    {
+                        "name": "x-access-token",
+                        "in": "header",
+                        "description": "token of github",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "x-key",
+                        "in": "header",
+                        "description": "Id of logged in team member",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    {
+                        "name": "commitUUID",
+                        "in": "path",
+                        "description": "UUID of commit",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No content"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    }
+                }
+            }
+        },
+        "/commit/{commitUUID}/markAsFixed": {
+            "put": {
+                "tags": [
+                    "Mark as fixed commit"
+                ],
+                "description": "update the status of commit to mark as fixed",
+                "parameters": [
+                    {
+                        "name": "x-access-token",
+                        "in": "header",
+                        "description": "token of github",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "x-key",
+                        "in": "header",
+                        "description": "Id of logged in team member",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    {
+                        "name": "commitUUID",
+                        "in": "path",
+                        "description": "UUID of commit",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No content"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    }
+                }
+            }
+        },
+        "/commit/{sha}/comment": {
+            "post": {
+                "tags": [
+                    "Comment"
+                ],
+                "description": "post the comment in the commit",
+                "parameters": [
+                    {
+                        "name": "x-access-token",
+                        "in": "header",
+                        "description": "token of github",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "x-key",
+                        "in": "header",
+                        "description": "Id of logged in team member",
+                        "required": true,
+                        "type": "integer"
+                    },
+                    {
+                        "name": "sha",
+                        "in": "path",
+                        "description": "sha of commit",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "description": "enter the detail of reviewer",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/comment"
+                        }
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No content"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    }
+                }
+            }
+        },
+        "/commit/comment/{commentId}": {
+            "put": {
+                "tags": [
+                    "Update comment"
+                ],
+                "description": "update the comment in the commit",
+                "parameters": [
+                    {
+                        "name": "x-access-token",
+                        "in": "header",
+                        "description": "token of github",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "x-key",
+                        "in": "header",
+                        "description": "Id of logged in team member",
+                        "required": true,
+                        "type": "integer"
+                    },
+                    {
+                        "name": "commentId",
+                        "in": "path",
+                        "description": "ID of comment",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "description": "enter the comment and name of a repository ",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/update-comment"
+                        }
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No content"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    }
+                }
+            }
+        },
+        "/commit/{sha}/comment/{commentId}": {
+            "delete": {
+                "tags": [
+                    "Delete comment"
+                ],
+                "description": "update the comment in the commit",
+                "parameters": [
+                    {
+                        "name": "x-access-token",
+                        "in": "header",
+                        "description": "token of github",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "x-key",
+                        "in": "header",
+                        "description": "Id of logged in team member",
+                        "required": true,
+                        "type": "integer"
+                    },
+                    {
+                        "name": "sha",
+                        "in": "path",
+                        "description": "sha of commit",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "commentId",
+                        "in": "path",
+                        "description": "ID of comment",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "description": "enter the comment and name of a repository ",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/delete-comment"
+                        }
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No content"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    }
+                }
+            }
+        },
+        "/repository/{repositoryId}/collaborators": {
+            "get": {
+                "tags": [
+                    "Collaborators"
+                ],
+                "description": "get the list of collaborators of repository",
+                "parameters": [
+                    {
+                        "name": "x-access-token",
+                        "in": "header",
+                        "description": "token of github",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "x-key",
+                        "in": "header",
+                        "description": "Id of logged in team member",
+                        "required": true,
+                        "type": "integer"
+                    },
+                    {
+                        "name": "repositoryId",
+                        "in": "path",
+                        "description": "ID of repository",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "400": {
+                        "description": "Invalid organization Id"
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "team-member-repositories": {
+            "required": [
+                "type",
+                "archive"
+            ],
+            "properties": {
+                "type": {
+                    "type": "integer",
+                    "format": "int64",
+                    "example": 0
+                },
+                "archive": {
+                    "type": "boolean",
+                    "example": false
+                }
+            }
+        },
+        "commits": {
+            "required": [
+                "teamMemberId",
+                "offset",
+                "status",
+                "MembersFilter"
+            ],
+            "properties": {
+                "teamMemberId": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "offset": {
+                    "type": "integer",
+                    "format": "int64",
+                    "example": 0
+                },
+                "status": {
+                    "type": "string",
+                    "example": "rejected | to be reviewed"
+                },
+                "MembersFilter": {
+                    "type": "array",
+                    "example": null
+                }
+            }
+        },
+        "commit": {
+            "required": [
+                "sha",
+                "teamMemberId",
+                "repositoryFullName"
+            ],
+            "properties": {
+                "teamMemberId": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "sha": {
+                    "type": "string"
+                },
+                "repositoryFullName": {
+                    "type": "string"
+                }
+            }
+        },
+        "comment": {
+            "required": [
+                "commentBody"
+            ],
+            "properties": {
+                "commentBody": {
+                    "type": "string"
+                },
+                "path": {
+                    "type": "string"
+                },
+                "position": {
+                    "type": "string"
+                }
+            }
+        },
+        "update-comment": {
+            "required": [
+                "commentBody",
+                "repositoryName"
+            ],
+            "properties": {
+                "commentBody": {
+                    "type": "string"
+                },
+                "repositoryName": {
+                    "type": "string"
+                }
+            }
+        },
+        "delete-comment": {
+            "required": [
+                "repositoryName"
+            ],
+            "properties": {
+                "repositoryName": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}
