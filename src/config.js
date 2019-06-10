@@ -6,7 +6,7 @@ const nodeEnv = process.env.NODE_ENV || 'development';
 
 const config = {
   development: {
-    port: 5001,
+    port: 5005,
     origin: (process.env.ORIGIN || '').split(','),
     baseURL: process.env.BASE_URL,
     rollbarAccessToken: null,
@@ -38,7 +38,7 @@ const config = {
     sessionSecret: process.env.SESSION_SECRET,
   },
   test: {
-    port: 5001,
+    port: 5005,
     origin: process.env.ORIGIN,
     baseURL: process.env.BASE_URL,
     rollbarAccessToken: null,
